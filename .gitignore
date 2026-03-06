@@ -1,18 +1,80 @@
-# Dependencies
+# ----------------------------
+# Dependencies / package managers
+# ----------------------------
 node_modules/
 .pnpm-store/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
-# Build outputs
+# ----------------------------
+# Builds / caches (Next + Turbo + TS)
+# ----------------------------
 .next/
+out/
 dist/
 .turbo/
+*.tsbuildinfo
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Next.js / React tooling caches
+.next/cache/
+.eslintcache
+.stylelintcache
 
-# Misc
-.DS_Store
+# ----------------------------
+# Logs
+# ----------------------------
+logs/
 *.log
-.vercel
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ----------------------------
+# Environment files (keep templates)
+# ----------------------------
+.env
+.env.*
+!.env.example
+
+# If you use per-app env templates, keep them too:
+!.env*.example
+
+# ----------------------------
+# Prisma / DB
+# ----------------------------
+# Local SQLite files (if ever used)
+*.sqlite
+*.sqlite-journal
+
+# Optional: Prisma generated client (usually NOT committed)
+# node_modules already covers it, but keep for clarity in case of custom output
+prisma/generated/
+
+# ----------------------------
+# OS / Editor
+# ----------------------------
+.DS_Store
+Thumbs.db
+
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+.idea/
+*.iml
+
+# ----------------------------
+# Deployment / hosting
+# ----------------------------
+.vercel/
+.netlify/
+serverless/
