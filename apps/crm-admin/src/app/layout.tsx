@@ -1,14 +1,16 @@
-import type { Metadata } from 'next'
+import "./globals.css"
+import type { Metadata } from "next"
+import type { ReactNode } from "react"
 
 export const metadata: Metadata = {
-  title: 'WebCraft CRM',
-  description: 'Internal client management',
+  title: "CindiWeb CRM",
+  description: "Internal client management",
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: 'monospace', background: '#0a0a08', color: '#e8e8e2', minHeight: '100vh' }}>
+      <body className="min-h-screen bg-neutral-950 font-mono text-neutral-200">
         {children}
       </body>
     </html>
