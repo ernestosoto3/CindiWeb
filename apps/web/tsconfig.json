@@ -1,12 +1,16 @@
 {
-  "extends": "@webcraft/config/nextjs.json",
+  "extends": "../../packages/config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "incremental": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "include": [
     "src",

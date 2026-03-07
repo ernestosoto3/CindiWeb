@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@webcraft/ui'],
+  transpilePackages: ["@cindiweb/ui"]
 }
 
 export default nextConfig

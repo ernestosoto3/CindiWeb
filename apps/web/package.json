@@ -1,5 +1,5 @@
 {
-  "name": "@webcraft/web",
+  "name": "@cindiweb/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,13 +10,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@webcraft/ui": "workspace:*",
+    "@cindiweb/ui": "workspace:*",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
-    "@webcraft/config": "workspace:*",
+    "@cindiweb/config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",

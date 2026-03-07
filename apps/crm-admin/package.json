@@ -1,5 +1,5 @@
 {
-  "name": "@webcraft/crm-admin",
+  "name": "@cindiweb/crm-admin",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
-    "@webcraft/ui": "workspace:*",
+    "@cindiweb/ui": "workspace:*",
     "@prisma/client": "^5.14.0",
     "next": "^14.2.0",
     "react": "^18.3.0",
@@ -21,7 +21,7 @@
     "stripe": "^16.0.0"
   },
   "devDependencies": {
-    "@webcraft/config": "workspace:*",
+    "@cindiweb/config": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",

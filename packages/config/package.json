@@ -1,6 +1,6 @@
 {
-  "name": "@webcraft/config",
-  "version": "0.0.0",
+  "name": "@cindiweb/config",
+  "version": "0.0.1",
   "private": true,
-  "files": ["nextjs.json", "base.json"]
+  "files": ["tsconfig.base.json", "eslint-base.js", "nextjs.json"]
 }

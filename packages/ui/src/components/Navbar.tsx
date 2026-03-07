@@ -1,51 +1,32 @@
-import React from 'react'
+import type { ReactNode } from "react"
 
-export interface NavbarProps {
-  logo?: string
-  links?: Array<{ label: string; href: string }>
-  cta?: { label: string; href: string }
+interface NavLink {
+  label: string
+  href: string
 }
 
-export function Navbar({ logo = 'WebCraft', links = [], cta }: NavbarProps) {
+export interface NavbarProps {
+  logo: ReactNode
+  links?: NavLink[]
+  cta?: ReactNode
+}
+
+export function Navbar({ logo, links = [], cta }: NavbarProps) {
   return (
-    <nav
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '20px 40px',
-        borderBottom: '1px solid #222220',
-      }}
-    >
-      <span style={{ fontWeight: 700, fontSize: '16px' }}>{logo}</span>
-      <ul style={{ display: 'flex', gap: '28px', listStyle: 'none', margin: 0, padding: 0 }}>
+    <nav className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+      <div className="flex-shrink-0">{logo}</div>
+
+      <ul className="hidden items-center gap-6 md:flex">
         {links.map((link) => (
           <li key={link.href}>
-            <a
-              href={link.href}
-              style={{ fontSize: '13px', color: '#999990', textDecoration: 'none' }}
-            >
+            <a href={link.href} className="text-sm text-gray-600 transition-colors hover:text-black">
               {link.label}
             </a>
           </li>
         ))}
       </ul>
-      {cta && (
-        <a
-          href={cta.href}
-          style={{
-            fontSize: '12px',
-            padding: '8px 18px',
-            background: '#c8f55a',
-            color: '#0a0a08',
-            fontWeight: 700,
-            textDecoration: 'none',
-            borderRadius: '2px',
-          }}
-        >
-          {cta.label}
-        </a>
-      )}
+
+      {cta ? <div className="flex-shrink-0">{cta}</div> : null}
     </nav>
   )
 }

@@ -1,0 +1,9 @@
+/** @type {import("eslint").Linter.Config} */
+module.exports = {
+  extends: ["next/core-web-vitals"],
+  rules: {
+    "no-console": ["warn", { allow: ["warn", "error"] }],
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/consistent-type-imports": "error"
+  }
+}
