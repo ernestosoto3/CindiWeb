@@ -8,44 +8,47 @@ datasource db {
 }
 
 model Client {
-  id          String   @id @default(cuid())
-  name        String
-  companyName String?  @map("company_name")
-  industry    String?
-  status      ClientStatus @default(LEAD)
-  contactInfo Json?    @map("contact_info")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id           String   @id @default(cuid())
+  name         String
+  companyName  String?
+  industry     String?
+  status       ClientStatus @default(LEAD)
+  contactInfo  Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  projects    Project[]
-  touchpoints Touchpoint[]
+  projects     Project[]
+  touchpoints  Touchpoint[]
 
   @@map("clients")
 }
 
 model Project {
-  id            String        @id @default(cuid())
-  clientId      String        @map("client_id")
-  templateType  String?       @map("template_type")
-  repoPath      String?       @map("repo_path")
-  productionUrl String?       @map("production_url")
-  carePlan      Boolean       @default(false) @map("care_plan")
-  renewalDate   DateTime?     @map("renewal_date")
-  status        ProjectStatus @default(IN_PROGRESS)
-  createdAt     DateTime      @default(now()) @map("created_at")
+  id              String   @id @default(cuid())
+  clientId        String
+  templateType    String
+  repoPath        String?
+  productionUrl   String?
+  carePlan        Boolean  @default(false)
+  renewalDate     DateTime?
+  status          ProjectStatus @default(ACTIVE)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  client                Client                @relation(fields: [clientId], references: [id])
-  maintenanceRequests   MaintenanceRequest[]
+  client              Client               @relation(fields: [clientId], references: [id])
+  maintenanceRequests MaintenanceRequest[]
 
   @@map("projects")
 }
 
 model Touchpoint {
   id           String   @id @default(cuid())
-  clientId     String   @map("client_id")
-  contactDate  DateTime @map("contact_date")
-  followupDate DateTime? @map("followup_date")
-  method       String   // email | dm | call
+  clientId     String
+  contactDate  DateTime
+  followupDate DateTime?
+  method       ContactMethod
   outcome      String?
+  createdAt    DateTime @default(now())
 
   client Client @relation(fields: [clientId], references: [id])
 
@@ -54,12 +57,13 @@ model Touchpoint {
 
 model MaintenanceRequest {
   id             String          @id @default(cuid())
-  projectId      String          @map("project_id")
+  projectId      String
   type           MaintenanceType
   hours          Float?
-  billedAmount   Decimal?        @map("billed_amount")
-  completionDate DateTime?       @map("completion_date")
+  billedAmount   Decimal?        @db.Decimal(10, 2)
+  completionDate DateTime?
   notes          String?
+  createdAt      DateTime        @default(now())
 
   project Project @relation(fields: [projectId], references: [id])
 
@@ -73,10 +77,16 @@ enum ClientStatus {
 }
 
 enum ProjectStatus {
-  IN_PROGRESS
-  LAUNCHED
-  ON_HOLD
+  ACTIVE
+  PAUSED
+  COMPLETED
   CANCELLED
+}
+
+enum ContactMethod {
+  EMAIL
+  DM
+  CALL
 }
 
 enum MaintenanceType {
