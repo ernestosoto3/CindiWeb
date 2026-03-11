@@ -19,6 +19,15 @@ export type { PricingTier } from "./components/PricingTable"
 
 export { ContactForm } from "./components/ContacForm"
 
+export { TeamGrid } from "./components/TeamGrid"
+export type { TeamMember, TeamGridProps } from "./components/TeamGrid"
+
+export { ReviewCard } from "./components/ReviewCard"
+export type { ReviewCardProps } from "./components/ReviewCard"
+
+export { CountdownTimer } from "./components/CountdownTimer"
+export type { CountdownTimerProps } from "./components/CountdownTimer"
+
 // Tokens
 export { colors } from './tokens/colors'
 export { typography } from './tokens/typography'
