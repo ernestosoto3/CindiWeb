@@ -1,69 +1,196 @@
-import { Navbar, Footer, Button, ContactForm } from "@cindiweb/ui";
+// templates/portfolio/app/page.tsx
+import { ContactForm } from "@cindiweb/ui";
 
-const PROJECTS = [
-  { title: "Rebrand — Anchor Coffee", tags: ["Brand", "Web"], year: "2024", img: "https://placehold.co/600x400/1a1a2e/fff?text=Anchor+Coffee" },
-  { title: "App UI — Finlo Finance", tags: ["UX", "Mobile"], year: "2024", img: "https://placehold.co/600x400/0f3460/fff?text=Finlo" },
-  { title: "Campaign — Nova Agency", tags: ["Art Direction"], year: "2023", img: "https://placehold.co/600x400/533483/fff?text=Nova" },
+const WORK = [
+  {
+    title: "Verdant Studio",
+    category: "Brand Identity + Web",
+    year: "2024",
+    img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+  },
+  {
+    title: "Petal Commerce",
+    category: "E-commerce · Next.js",
+    year: "2024",
+    img: "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=800&q=80",
+  },
+  {
+    title: "Nomad Finance",
+    category: "Dashboard · Design System",
+    year: "2023",
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+  },
+  {
+    title: "Forma Architects",
+    category: "Web + CMS",
+    year: "2023",
+    img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
+  },
 ];
 
-const SKILLS = ["UI/UX Design", "Brand Identity", "Motion Design", "Next.js", "Figma", "Illustration"];
+const SERVICES = [
+  { title: "Web Design", desc: "Sites that reflect your brand and convert visitors into clients." },
+  { title: "Development", desc: "Next.js, TypeScript, headless CMS. Fast, scalable, maintainable." },
+  { title: "Design Systems", desc: "Component libraries and style guides your team can actually use." },
+];
+
+const SKILLS = [
+  "Next.js", "TypeScript", "Tailwind CSS", "Figma",
+  "Node.js", "PostgreSQL", "Framer Motion", "Vercel",
+];
 
 export default function Page() {
   return (
-    <>
-      <Navbar logo={<span className="font-bold">Jordan Lee</span>} links={[
-        { label: "Work", href: "#work" },
-        { label: "About", href: "#about" },
-        { label: "Contact", href: "#contact" },
-      ]} />
-      {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-32 pb-20">
-        <p className="text-sm text-indigo-500 tracking-widest uppercase mb-4">Designer & Developer</p>
-        <h1 className="text-6xl font-bold text-gray-900 leading-tight mb-6">
-          I craft digital<br />experiences that stick.
+    <div className="bg-[#f4f1ec] text-[#141210]" style={{ fontFamily: "system-ui, sans-serif" }}>
+
+      {/* NAV */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#f4f1ec]/90 backdrop-blur-sm border-b border-[#d9d3ca]">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <span className="font-bold text-sm tracking-tight">Alex Mora</span>
+          <nav className="hidden md:flex items-center gap-8 text-sm text-[#6b6560]">
+            <a href="#work" className="hover:text-[#141210] transition-colors">Work</a>
+            <a href="#services" className="hover:text-[#141210] transition-colors">Services</a>
+            <a href="#contact" className="hover:text-[#141210] transition-colors">Contact</a>
+          </nav>
+          <a
+            href="#contact"
+            className="text-sm bg-[#141210] text-[#f4f1ec] px-5 py-2.5 hover:bg-[#2d2a27] transition-colors"
+          >
+            Hire me
+          </a>
+        </div>
+      </header>
+
+      {/* HERO — fixed: pt-24 for nav offset, no min-h-screen, content-driven height */}
+      <section className="max-w-6xl mx-auto px-6 pt-28 pb-20">
+        {/* status badge */}
+        <div className="mb-12">
+          <span className="inline-flex items-center gap-2 text-xs text-[#6b6560] border border-[#d9d3ca] px-3 py-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            Available for new projects
+          </span>
+        </div>
+
+        <h1
+          className="text-[18vw] sm:text-[15vw] md:text-[11vw] font-bold leading-[0.92] tracking-tight text-[#141210] mb-8"
+        >
+          Designer<br />&amp; Developer
         </h1>
-        <p className="text-xl text-gray-500 max-w-2xl mb-8">5 years building brands and interfaces for startups and studios across the globe.</p>
-        <div className="flex gap-4">
-          <Button size="lg">View Work</Button>
-          <Button size="lg" variant="ghost">Download CV</Button>
+
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-6">
+          <p className="text-[#6b6560] text-base leading-relaxed max-w-md">
+            I build websites and digital products for ambitious brands. Based in San Juan, PR. Working globally.
+          </p>
+          <a
+            href="#work"
+            className="text-sm underline underline-offset-4 text-[#6b6560] hover:text-[#141210] transition-colors whitespace-nowrap"
+          >
+            View Work ↓
+          </a>
         </div>
       </section>
-      {/* Work */}
-      <section id="work" className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-gray-900 mb-12">Selected Work</h2>
-        <div className="flex flex-col gap-12">
-          {PROJECTS.map((p) => (
-            <div key={p.title} className="grid md:grid-cols-2 gap-8 items-center group cursor-pointer">
-              <div className="overflow-hidden rounded-2xl">
-                <img src={p.img} alt={p.title} className="w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">{p.year}</p>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{p.title}</h3>
-                <div className="flex gap-2 flex-wrap">
-                  {p.tags.map((t) => <span key={t} className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">{t}</span>)}
+
+      {/* SELECTED WORK */}
+      <section id="work" className="border-t border-[#d9d3ca] py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-16">
+            <h2 className="text-xs tracking-[0.4em] uppercase text-[#a09890]">Selected Work</h2>
+            <span className="text-xs text-[#a09890]">{WORK.length} Projects</span>
+          </div>
+
+          <div className="flex flex-col divide-y divide-[#d9d3ca]">
+            {WORK.map(({ title, category, year, img }, i) => (
+              <div
+                key={title}
+                className="group flex items-center gap-6 py-6 cursor-pointer hover:bg-[#ede8e0] -mx-6 px-6 transition-colors"
+              >
+                <span className="text-xs text-[#c4bbb1] w-8 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <div className="w-16 h-12 overflow-hidden shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <img src={img} alt={title} className="w-full h-full object-cover" />
                 </div>
+                <h3 className="text-xl md:text-2xl font-medium flex-1 group-hover:translate-x-1 transition-transform">{title}</h3>
+                <div className="hidden md:flex items-center gap-8 text-sm text-[#a09890]">
+                  <span>{category}</span>
+                  <span>{year}</span>
+                </div>
+                <span className="text-[#a09890] group-hover:text-[#141210] transition-colors">→</span>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      {/* Skills */}
-      <section className="bg-gray-50 py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Skills</h2>
-          <div className="flex flex-wrap gap-3">
-            {SKILLS.map((s) => <span key={s} className="px-4 py-2 border border-gray-300 rounded-full text-sm text-gray-700">{s}</span>)}
+            ))}
           </div>
         </div>
       </section>
-      {/* Contact */}
-      <section id="contact" className="max-w-2xl mx-auto px-6 py-24">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Let's work together</h2>
-        <p className="text-gray-500 mb-10">Have a project in mind? Send me a message and let's talk.</p>
-        <ContactForm />
+
+      {/* SERVICES */}
+      <section id="services" className="bg-[#141210] text-[#f4f1ec] py-28 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-xs tracking-[0.4em] uppercase text-[#6b6560] mb-16">What I Do</h2>
+          <div className="grid md:grid-cols-3 gap-12">
+            {SERVICES.map(({ title, desc }) => (
+              <div key={title}>
+                <h3 className="text-2xl font-medium mb-4">{title}</h3>
+                <p className="text-[#a09890] leading-relaxed text-sm">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-20 pt-12 border-t border-white/10">
+            <p className="text-xs tracking-[0.4em] uppercase text-[#6b6560] mb-6">Tools & Technologies</p>
+            <div className="flex flex-wrap gap-3">
+              {SKILLS.map((skill) => (
+                <span
+                  key={skill}
+                  className="text-sm px-4 py-2 border border-white/10 text-[#a09890] hover:border-white/30 hover:text-[#f4f1ec] transition-all cursor-default"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
-      <Footer brandName="Jordan Lee" />
-    </>
+
+      {/* TESTIMONIAL */}
+      <section className="border-t border-[#d9d3ca] py-28 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-2xl md:text-3xl font-light leading-relaxed text-[#141210] italic mb-8">
+            "Alex took our brand from a messy Squarespace to a site that actually reflects who we are. The whole process was smooth and the result exceeded every expectation."
+          </p>
+          <p className="text-sm text-[#a09890]">— Sofia R., CEO at Verdant Studio</p>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" className="bg-[#ede8e0] border-t border-[#d9d3ca] py-28 px-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+              Let's build<br />something great.
+            </h2>
+            <p className="text-[#6b6560] text-sm leading-relaxed mb-10 max-w-sm">
+              I take on a small number of projects each quarter to keep quality high. If you have something interesting, let's talk.
+            </p>
+            <div className="flex flex-col gap-3 text-sm text-[#6b6560]">
+              <a href="mailto:hello@alexmora.co" className="hover:text-[#141210] transition-colors">
+                hello@alexmora.co
+              </a>
+              <a href="#" className="hover:text-[#141210] transition-colors">LinkedIn →</a>
+            </div>
+          </div>
+          {/* ContactForm on light background — theme="light" is default, looks clean here */}
+          <div>
+            <ContactForm variant="card" />
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-[#d9d3ca] px-6 py-8">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-[#a09890]">
+          <span>Alex Mora</span>
+          <span>© 2025 · All rights reserved</span>
+        </div>
+      </footer>
+
+    </div>
   );
 }

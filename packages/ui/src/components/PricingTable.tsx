@@ -1,7 +1,5 @@
 "use client"
 
-import { Button } from "./Button"
-
 function cn(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ")
 }
@@ -14,6 +12,7 @@ export interface PricingFeature {
 export interface PricingTier {
   name: string
   price: string
+  /** Pass "mo" or "yr" — the slash is added automatically */
   period?: string
   description?: string
   features: (PricingFeature | string)[]
@@ -35,14 +34,13 @@ export interface PricingTableProps {
 function CheckIcon({ featured }: { featured: boolean }) {
   return (
     <svg
-      className={cn("mt-0.5 h-4 w-4 shrink-0", featured ? "text-white" : "text-zinc-900")}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2.5}
+      width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke={featured ? "#ffffff" : "#4f46e5"}
+      strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+      style={{ flexShrink: 0, marginTop: 2 }}
       aria-hidden="true"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      <path d="M5 13l4 4L19 7" />
     </svg>
   )
 }
@@ -50,41 +48,29 @@ function CheckIcon({ featured }: { featured: boolean }) {
 function XIcon() {
   return (
     <svg
-      className="mt-0.5 h-4 w-4 shrink-0 text-zinc-300"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
+      width="16" height="16" viewBox="0 0 24 24" fill="none"
+      stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      style={{ flexShrink: 0, marginTop: 2 }}
       aria-hidden="true"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      <path d="M6 18L18 6M6 6l12 12" />
     </svg>
   )
 }
 
-function FeatureRow({
-  feature,
-  featured,
-}: {
-  feature: PricingFeature | string
-  featured: boolean
-}) {
+function FeatureRow({ feature, featured }: { feature: PricingFeature | string; featured: boolean }) {
   const text = typeof feature === "string" ? feature : feature.text
   const included = typeof feature === "string" ? true : (feature.included ?? true)
 
   return (
-    <li className="flex items-start gap-2.5">
+    <li style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
       {included ? <CheckIcon featured={featured} /> : <XIcon />}
-      <span
-        className={cn(
-          "text-sm leading-snug",
-          included
-            ? featured
-              ? "text-zinc-100"
-              : "text-zinc-600"
-            : "text-zinc-400 line-through"
-        )}
-      >
+      <span style={{
+        fontSize: 14,
+        lineHeight: "1.4",
+        color: !included ? "#9ca3af" : featured ? "#e4e4e7" : "#52525b",
+        textDecoration: !included ? "line-through" : "none",
+      }}>
         {text}
       </span>
     </li>
@@ -92,132 +78,171 @@ function FeatureRow({
 }
 
 function TierCard({
-  tier,
-  compact,
-  onSelect,
+  tier, compact, onSelect,
 }: {
   tier: PricingTier
   compact: boolean
   onSelect?: (tier: PricingTier) => void
 }) {
   const featured = Boolean(tier.highlighted)
+  const pad = compact ? 24 : 32
+  const period = tier.period ? tier.period.replace(/^\//, "") : undefined
+
+  // Button styles vary by featured state
+  const btnBase: React.CSSProperties = {
+    width: "100%",
+    padding: "13px 24px",
+    borderRadius: 10,
+    border: "none",
+    fontSize: 15,
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "opacity 0.15s, background-color 0.15s",
+  }
+
+  const featuredBtn: React.CSSProperties = {
+    ...btnBase,
+    backgroundColor: "#ffffff",
+    color: "#18181b",
+  }
+
+  const defaultBtn: React.CSSProperties = {
+    ...btnBase,
+    backgroundColor: "#18181b",
+    color: "#ffffff",
+  }
 
   return (
-    <div
-      className={cn(
-        "relative flex flex-col rounded-2xl border transition-shadow duration-200",
-        compact ? "p-6" : "p-8",
-        featured
-          ? "border-zinc-900 bg-zinc-900 shadow-2xl shadow-zinc-900/20"
-          : "border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-md"
-      )}
-    >
+    <div style={{
+      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      borderRadius: 16,
+      padding: pad,
+      border: featured ? "1px solid #18181b" : "1px solid #e4e4e7",
+      backgroundColor: featured ? "#18181b" : "#ffffff",
+      boxShadow: featured
+        ? "0 20px 40px rgba(0,0,0,0.25)"
+        : "0 1px 3px rgba(0,0,0,0.06)",
+    }}>
+
+      {/* Badge */}
       {featured && tier.badge ? (
-        <div className="absolute left-1/2 top-[-0.875rem] -translate-x-1/2">
-          <span className="inline-flex items-center whitespace-nowrap rounded-full border border-zinc-100 bg-white px-3 py-1 text-xs font-semibold text-zinc-900 shadow-md">
+        <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)" }}>
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+            borderRadius: 999,
+            border: "1px solid #e4e4e7",
+            background: "#ffffff",
+            padding: "4px 12px",
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#18181b",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+          }}>
             {tier.badge}
           </span>
         </div>
       ) : null}
 
-      <div className={cn("mb-6", compact && "mb-4")}>
-        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-zinc-400">
+      {/* Header */}
+      <div style={{ marginBottom: compact ? 16 : 24 }}>
+        <p style={{
+          marginBottom: 12,
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "#71717a",
+        }}>
           {tier.name}
         </p>
 
-        <div className="flex items-baseline gap-1.5">
-          <span
-            className={cn(
-              "font-bold tracking-tight",
-              compact ? "text-3xl" : "text-4xl",
-              featured ? "text-white" : "text-zinc-900"
-            )}
-          >
+        <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+          <span style={{
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            fontSize: compact ? 32 : 42,
+            color: featured ? "#ffffff" : "#18181b",
+          }}>
             {tier.price}
           </span>
-
-          {tier.period ? <span className="text-sm text-zinc-400">/{tier.period}</span> : null}
+          {period ? (
+            <span style={{ fontSize: 14, color: featured ? "#71717a" : "#a1a1aa" }}>
+              /{period}
+            </span>
+          ) : null}
         </div>
 
         {tier.description ? (
-          <p
-            className={cn(
-              "mt-2 text-sm leading-relaxed",
-              featured ? "text-zinc-400" : "text-zinc-500"
-            )}
-          >
+          <p style={{
+            marginTop: 10,
+            fontSize: 14,
+            lineHeight: "1.5",
+            color: featured ? "#a1a1aa" : "#71717a",
+          }}>
             {tier.description}
           </p>
         ) : null}
       </div>
 
-      <div
-        className={cn(
-          "mb-6 border-t",
-          compact && "mb-4",
-          featured ? "border-zinc-700" : "border-zinc-100"
-        )}
-      />
+      {/* Divider */}
+      <div style={{
+        marginBottom: compact ? 16 : 24,
+        borderTop: `1px solid ${featured ? "rgba(255,255,255,0.1)" : "#f4f4f5"}`,
+      }} />
 
-      <ul className="flex flex-1 flex-col gap-3">
+      {/* Features */}
+      <ul style={{
+        flex: 1,
+        listStyle: "none",
+        padding: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: 14,
+      }}>
         {tier.features.map((feature, index) => {
-          const key =
-            typeof feature === "string"
-              ? `${tier.name}-${feature}-${index}`
-              : `${tier.name}-${feature.text}-${index}`
-
+          const key = typeof feature === "string"
+            ? `${tier.name}-${feature}-${index}`
+            : `${tier.name}-${feature.text}-${index}`
           return <FeatureRow key={key} feature={feature} featured={featured} />
         })}
       </ul>
 
+      {/* CTA — all inline styles, no shared Button component */}
       {tier.cta ? (
-        <div className={cn("mt-8", compact && "mt-6")}>
-          <Button
-            variant={featured ? "secondary" : "primary"}
-            size={compact ? "md" : "lg"}
-            fullWidth
-            onClick={() => {
-              tier.onCtaClick?.()
-              onSelect?.(tier)
-            }}
+        <div style={{ marginTop: compact ? 24 : 32 }}>
+          <button
+            onClick={() => { tier.onCtaClick?.(); onSelect?.(tier) }}
+            style={featured ? featuredBtn : defaultBtn}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.88")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
           >
             {tier.cta}
-          </Button>
+          </button>
         </div>
       ) : null}
     </div>
   )
 }
 
-const gridClasses: Record<number, string> = {
-  1: "mx-auto max-w-sm grid-cols-1",
-  2: "mx-auto max-w-3xl grid-cols-1 md:grid-cols-2",
-  3: "grid-cols-1 md:grid-cols-3",
-  4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
-}
-
 export function PricingTable({
-  tiers,
-  heading,
-  subheading,
-  compact = false,
-  onSelect,
-  className,
+  tiers, heading, subheading, compact = false, onSelect, className,
 }: PricingTableProps) {
-  const cols = Math.min(tiers.length, 4)
-
   return (
     <section className={cn("w-full", className)}>
       {heading || subheading ? (
-        <div className="mb-12 text-center">
+        <div style={{ marginBottom: 48, textAlign: "center" }}>
           {heading ? (
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 md:text-4xl">
+            <h2 style={{ fontSize: 36, fontWeight: 700, color: "#18181b", letterSpacing: "-0.02em" }}>
               {heading}
             </h2>
           ) : null}
-
           {subheading ? (
-            <p className="mx-auto mt-3 max-w-xl text-lg text-zinc-500">
+            <p style={{ marginTop: 12, fontSize: 18, color: "#71717a", maxWidth: 480, margin: "12px auto 0" }}>
               {subheading}
             </p>
           ) : null}
@@ -225,15 +250,24 @@ export function PricingTable({
       ) : null}
 
       <div
-        className={cn(
-          "grid items-start gap-5",
-          gridClasses[cols] ?? "grid-cols-1 md:grid-cols-3"
-        )}
+        className="pricing-grid"
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${Math.min(tiers.length, 3)}, minmax(0, 1fr))`,
+          gap: 20,
+          alignItems: "start",
+        }}
       >
         {tiers.map((tier) => (
           <TierCard key={tier.name} tier={tier} compact={compact} onSelect={onSelect} />
         ))}
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .pricing-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   )
 }
