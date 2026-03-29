@@ -1,271 +1,406 @@
-// templates/ecommerce/app/page.tsx
+"use client"
 
+import { useState } from "react"
+
+/* ── 2 E-COMMERCE COLOR PALETTES ── */
+const PALETTES = {
+  "neutral-base": {
+    label: "Neutral Base",
+    swatch: "#452829",
+    isDark: false,
+    background: "#F3E8DF",
+    surface: "#E8D1C5",
+    primaryBrand: "#452829",
+    secondaryBrand: "#57595B",
+    accent: "#E8D1C5",
+    headingText: "#452829",
+    bodyText: "#452829",
+    mutedText: "#57595B",
+    border: "#57595B",
+    ctaButton: "#E8D1C5",
+    ctaHover: "#452829",
+    // Derived
+    navBg: "rgba(243,232,223,0.95)",
+    navBorder: "#d5c4b8",
+    darkText: "#452829",
+    muted: "#57595B",
+    lightMuted: "#a09890",
+    trustBg: "#e6d5c9",
+    catBorder: "#d5c4b8",
+    productBg: "#e0cfc3",
+    // Dark section (Our Story)
+    storyBg: "#452829",
+    storyText: "#F3E8DF",
+    storyMuted: "#a09890",
+    // Newsletter
+    nlBg: "#F3E8DF",
+    nlBorder: "#d5c4b8",
+    nlBtnBg: "#452829",
+    nlBtnText: "#F3E8DF",
+    // Footer
+    footerBorder: "#d5c4b8",
+    footerMuted: "#a09890",
+    // CTA buttons
+    shopBtnBg: "#452829",
+    shopBtnText: "#F3E8DF",
+    shopBtnHoverBg: "#5a3a3b",
+    outlineBorder: "#57595B",
+    outlineText: "#57595B",
+  },
+  "strong-cta": {
+    label: "Strong CTA Color",
+    swatch: "#FA5C5C",
+    isDark: false,
+    background: "#FBEF76",
+    surface: "#FEC288",
+    primaryBrand: "#FA5C5C",
+    secondaryBrand: "#FD8A6B",
+    accent: "#FEC288",
+    headingText: "#FA5C5C",
+    bodyText: "#FA5C5C",
+    mutedText: "#FA5C5C",
+    border: "#FA5C5C",
+    ctaButton: "#FEC288",
+    ctaHover: "#FA5C5C",
+    navBg: "rgba(251,239,118,0.95)",
+    navBorder: "#FEC288",
+    darkText: "#5a1a1a",
+    muted: "#FA5C5C",
+    lightMuted: "#FD8A6B",
+    trustBg: "#fde68a",
+    catBorder: "#FD8A6B",
+    productBg: "#fde68a",
+    storyBg: "#5a1a1a",
+    storyText: "#FBEF76",
+    storyMuted: "#FD8A6B",
+    nlBg: "#FBEF76",
+    nlBorder: "#FEC288",
+    nlBtnBg: "#FA5C5C",
+    nlBtnText: "#FBEF76",
+    footerBorder: "#FEC288",
+    footerMuted: "#FD8A6B",
+    shopBtnBg: "#FA5C5C",
+    shopBtnText: "#FBEF76",
+    shopBtnHoverBg: "#e04a4a",
+    outlineBorder: "#FD8A6B",
+    outlineText: "#FA5C5C",
+  },
+} as const
+
+type PaletteKey = keyof typeof PALETTES
+
+/* ── CONTENT DATA ── */
 const PRODUCTS = [
-  {
-    name: "Ridge Ceramic Mug",
-    category: "Kitchen",
-    price: "$42",
-    img: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80",
-  },
-  {
-    name: "Woven Throw Blanket",
-    category: "Home",
-    price: "$128",
-    img: "https://images.unsplash.com/photo-1580301762395-21ce84d00bc6?w=600&q=80",
-  },
-  {
-    name: "Linen Apron",
-    category: "Kitchen",
-    price: "$68",
-    img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
-  },
-  {
-    name: "Hand-thrown Vase",
-    category: "Decor",
-    price: "$95",
-    img: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=600&q=80",
-  },
-  {
-    name: "Oak Serving Board",
-    category: "Kitchen",
-    price: "$84",
-    img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600&q=80",
-  },
-  {
-    name: "Merino Wool Pillow",
-    category: "Home",
-    price: "$110",
-    img: "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80",
-  },
-];
+  { name: "Ridge Ceramic Mug", category: "Kitchen", price: "$42", img: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80" },
+  { name: "Woven Throw Blanket", category: "Home", price: "$128", img: "https://images.unsplash.com/photo-1580301762395-21ce84d00bc6?w=600&q=80" },
+  { name: "Linen Apron", category: "Kitchen", price: "$68", img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" },
+  { name: "Hand-thrown Vase", category: "Decor", price: "$95", img: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=600&q=80" },
+  { name: "Oak Serving Board", category: "Kitchen", price: "$84", img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?w=600&q=80" },
+  { name: "Merino Wool Pillow", category: "Home", price: "$110", img: "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80" },
+]
 
-const CATEGORIES = ["All", "Kitchen", "Home", "Decor"];
+const CATEGORIES = ["All", "Kitchen", "Home", "Decor"]
 
-export default function Page() {
+const TRUST = ["🌿 Sustainably sourced", "🔨 Handmade by artisans", "📦 Free shipping over $100", "↩ 30-day returns"]
+
+/* ── PALETTE SWITCHER ── */
+function PaletteSwitcher({ current, onChange }: { current: PaletteKey; onChange: (k: PaletteKey) => void }) {
+  const [open, setOpen] = useState(false)
+  const p = PALETTES[current]
+
   return (
-    <div className="bg-[#f9f6f1] text-[#1c1917]" style={{ fontFamily: "'Georgia', serif" }}>
+    <div style={{ position: "relative" }}>
+      <button
+        onClick={() => setOpen(!open)}
+        aria-label="Change color palette"
+        style={{
+          display: "flex", alignItems: "center", gap: "0.4rem",
+          background: "none", border: `1px solid ${p.navBorder}`,
+          borderRadius: "100px", padding: "0.3rem 0.65rem 0.3rem 0.4rem",
+          cursor: "pointer", fontSize: "0.6rem",
+          letterSpacing: "0.08em", textTransform: "uppercase",
+          color: p.muted, fontFamily: "system-ui, sans-serif",
+          transition: "all 0.2s",
+        }}
+      >
+        <span style={{
+          width: 12, height: 12, borderRadius: "50%",
+          backgroundColor: p.primaryBrand,
+          border: `2px solid ${p.background}`,
+          boxShadow: `0 0 0 1px ${p.navBorder}`,
+        }} />
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
+          <path d="M2 4L5 7L8 4" stroke={p.muted} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 98 }} />
+          <div style={{
+            position: "absolute", top: "calc(100% + 8px)", right: 0,
+            backgroundColor: p.background,
+            border: `1px solid ${p.navBorder}`,
+            borderRadius: "8px", padding: "0.5rem",
+            zIndex: 99, minWidth: "175px",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+          }}>
+            {(Object.entries(PALETTES) as [PaletteKey, typeof PALETTES[PaletteKey]][]).map(([key, pal]) => (
+              <button
+                key={key}
+                onClick={() => { onChange(key); setOpen(false) }}
+                style={{
+                  display: "flex", alignItems: "center", gap: "0.6rem",
+                  width: "100%", padding: "0.45rem 0.55rem",
+                  background: key === current ? p.surface : "transparent",
+                  border: "none", borderRadius: "5px",
+                  cursor: "pointer", textAlign: "left",
+                  transition: "background 0.15s",
+                }}
+                onMouseEnter={e => { if (key !== current) e.currentTarget.style.background = p.surface }}
+                onMouseLeave={e => { if (key !== current) e.currentTarget.style.background = "transparent" }}
+              >
+                <div style={{ display: "flex", gap: "2px" }}>
+                  {[pal.primaryBrand, pal.secondaryBrand, pal.background].map((c, i) => (
+                    <span key={i} style={{
+                      width: 11, height: 11, borderRadius: "50%",
+                      backgroundColor: c,
+                      border: "1.5px solid rgba(0,0,0,0.08)",
+                    }} />
+                  ))}
+                </div>
+                <span style={{
+                  fontSize: "0.65rem", color: p.darkText,
+                  fontFamily: "system-ui, sans-serif",
+                  fontWeight: key === current ? 600 : 400,
+                }}>{pal.label}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
 
-      {/* NAV */}
-      <header className="sticky top-0 z-50 bg-[#f9f6f1]/95 backdrop-blur-sm border-b border-[#e8e0d5]">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-lg tracking-[0.12em] uppercase font-light">Maison</span>
-          <nav
-            className="hidden md:flex items-center gap-8 text-sm text-[#78716c]"
-            style={{ fontFamily: "system-ui, sans-serif" }}
-          >
-            <a href="#shop" className="hover:text-[#1c1917] transition-colors">Shop</a>
-            <a href="#story" className="hover:text-[#1c1917] transition-colors">Our Story</a>
-            <a href="#" className="hover:text-[#1c1917] transition-colors">Journal</a>
+/* ── PRODUCT CARD ── */
+function ProductCard({ name, category, price, img, palette }: {
+  name: string; category: string; price: string; img: string;
+  palette: typeof PALETTES[PaletteKey]
+}) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <div
+      style={{ cursor: "pointer" }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div style={{ aspectRatio: "1", overflow: "hidden", backgroundColor: palette.productBg, marginBottom: "1rem" }}>
+        <img src={img} alt={name} style={{
+          width: "100%", height: "100%", objectFit: "cover",
+          transform: hovered ? "scale(1.05)" : "scale(1)",
+          transition: "transform 0.5s",
+        }} />
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "0.5rem", fontFamily: "system-ui, sans-serif" }}>
+        <div>
+          <p style={{ fontSize: "0.875rem", fontWeight: 500, color: palette.darkText }}>{name}</p>
+          <p style={{ fontSize: "0.75rem", color: palette.lightMuted, marginTop: "0.15rem", letterSpacing: "0.1em", textTransform: "uppercase" }}>{category}</p>
+        </div>
+        <p style={{ fontSize: "0.875rem", fontWeight: 500, color: palette.darkText }}>{price}</p>
+      </div>
+    </div>
+  )
+}
+
+/* ── MAIN PAGE ── */
+export default function Page() {
+  const [paletteKey, setPaletteKey] = useState<PaletteKey>("neutral-base")
+  const p = PALETTES[paletteKey]
+
+  return (
+    <div style={{
+      backgroundColor: p.background, color: p.darkText,
+      fontFamily: "Georgia, serif", overflowX: "hidden",
+      transition: "background-color 0.4s, color 0.4s",
+    }}>
+      <style>{`
+        .ec-hero { display: grid; grid-template-columns: 1fr 1fr; }
+        .ec-products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .ec-story { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        @media (max-width: 768px) {
+          .ec-hero { grid-template-columns: 1fr; }
+          .ec-hero-img { aspect-ratio: 4/3; }
+          .ec-products { grid-template-columns: repeat(2, 1fr); }
+          .ec-story { grid-template-columns: 1fr; }
+          .ec-cats { display: none !important; }
+        }
+      `}</style>
+
+      {/* ─── NAV ─── */}
+      <header style={{
+        position: "sticky", top: 0, zIndex: 50,
+        backgroundColor: p.navBg, backdropFilter: "blur(8px)",
+        borderBottom: `1px solid ${p.navBorder}`,
+        transition: "all 0.4s",
+      }}>
+        <div style={{
+          maxWidth: "80rem", margin: "0 auto", padding: "0 1.5rem",
+          height: "4rem", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <span style={{ fontSize: "1.1rem", letterSpacing: "0.12em", textTransform: "uppercase", fontWeight: 300, color: p.darkText }}>Maison</span>
+          <nav style={{ display: "flex", alignItems: "center", gap: "2rem", fontSize: "0.875rem", color: p.muted, fontFamily: "system-ui, sans-serif" }}>
+            <a href="#shop" style={{ color: "inherit", textDecoration: "none" }}>Shop</a>
+            <a href="#story" style={{ color: "inherit", textDecoration: "none" }}>Our Story</a>
+            <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Journal</a>
+            <PaletteSwitcher current={paletteKey} onChange={setPaletteKey} />
           </nav>
-          <a href="#" className="text-sm" style={{ fontFamily: "system-ui, sans-serif" }}>
-            Cart (0)
-          </a>
+          <a href="#" style={{ fontSize: "0.875rem", color: p.darkText, textDecoration: "none", fontFamily: "system-ui, sans-serif" }}>Cart (0)</a>
         </div>
       </header>
 
-      {/* HERO — fixed: no min-h-screen on mobile, image is decorative below on mobile */}
-      <section className="grid md:grid-cols-2">
-        {/* text side — stands on its own at any height */}
-        <div className="flex flex-col justify-center px-8 md:px-16 py-20">
-          <p
-            className="text-xs tracking-[0.4em] uppercase text-[#a8a29e] mb-6"
-            style={{ fontFamily: "system-ui, sans-serif" }}
-          >
+      {/* ─── HERO ─── */}
+      <section className="ec-hero">
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "5rem 2rem 5rem 4rem" }}>
+          <p style={{ fontSize: "0.75rem", letterSpacing: "0.4em", textTransform: "uppercase", color: p.lightMuted, marginBottom: "1.5rem", fontFamily: "system-ui, sans-serif" }}>
             Handcrafted · Small Batch
           </p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.08] mb-8 text-[#1c1917]">
+          <h1 style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 300, lineHeight: 1.08, marginBottom: "2rem", color: p.headingText }}>
             Objects made<br />to last.
           </h1>
-          <p
-            className="text-[#78716c] leading-relaxed max-w-sm mb-10"
-            style={{ fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}
-          >
+          <p style={{ color: p.muted, lineHeight: 1.6, maxWidth: "24rem", marginBottom: "2.5rem", fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}>
             We work with small-scale makers across Europe to bring you pieces that age gracefully and live in your home for decades.
           </p>
-          <div className="flex gap-4 flex-wrap">
-            <a
-              href="#shop"
-              className="text-sm bg-[#1c1917] text-[#f9f6f1] px-8 py-3.5 hover:bg-[#292524] transition-colors"
-              style={{ fontFamily: "system-ui, sans-serif" }}
-            >
-              Shop Now
-            </a>
-            <a
-              href="#story"
-              className="text-sm text-[#78716c] px-8 py-3.5 border border-[#d6cfc6] hover:border-[#a8a29e] transition-colors"
-              style={{ fontFamily: "system-ui, sans-serif" }}
-            >
-              Our Story
-            </a>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <a href="#shop" style={{
+              fontSize: "0.875rem", backgroundColor: p.shopBtnBg, color: p.shopBtnText,
+              padding: "0.9rem 2rem", textDecoration: "none", fontFamily: "system-ui, sans-serif",
+              transition: "background-color 0.2s",
+            }}>Shop Now</a>
+            <a href="#story" style={{
+              fontSize: "0.875rem", color: p.outlineText,
+              padding: "0.9rem 2rem", border: `1px solid ${p.outlineBorder}`,
+              textDecoration: "none", fontFamily: "system-ui, sans-serif",
+            }}>Our Story</a>
           </div>
         </div>
-        {/* image — full height on desktop, aspect ratio box on mobile */}
-        <div className="relative aspect-4/3 md:aspect-auto md:min-h-140">
-          <img
-            src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80"
-            alt="Artisan home goods"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+        <div className="ec-hero-img" style={{ position: "relative", minHeight: "35rem" }}>
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80" alt="Artisan home goods" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         </div>
       </section>
 
-      {/* TRUST STRIP */}
-      <section className="border-t border-b border-[#e8e0d5] bg-[#f0ebe3] py-6">
-        <div
-          className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-8"
-          style={{ fontFamily: "system-ui, sans-serif" }}
-        >
-          {[
-            "🌿 Sustainably sourced",
-            "🔨 Handmade by artisans",
-            "📦 Free shipping over $100",
-            "↩ 30-day returns",
-          ].map((item) => (
-            <span key={item} className="text-sm text-[#78716c]">{item}</span>
+      {/* ─── TRUST STRIP ─── */}
+      <section style={{
+        borderTop: `1px solid ${p.navBorder}`, borderBottom: `1px solid ${p.navBorder}`,
+        backgroundColor: p.trustBg, padding: "1.5rem 0",
+        transition: "all 0.4s",
+      }}>
+        <div style={{ maxWidth: "64rem", margin: "0 auto", padding: "0 1.5rem", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "2rem", fontFamily: "system-ui, sans-serif" }}>
+          {TRUST.map(item => (
+            <span key={item} style={{ fontSize: "0.875rem", color: p.muted }}>{item}</span>
           ))}
         </div>
       </section>
 
-      {/* PRODUCT GRID */}
-      <section id="shop" className="max-w-7xl mx-auto px-6 py-24">
-        <div className="flex items-end justify-between mb-12">
+      {/* ─── PRODUCT GRID ─── */}
+      <section id="shop" style={{ maxWidth: "80rem", margin: "0 auto", padding: "6rem 1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem" }}>
           <div>
-            <p
-              className="text-xs tracking-[0.4em] uppercase text-[#a8a29e] mb-2"
-              style={{ fontFamily: "system-ui, sans-serif" }}
-            >
-              New Arrivals
-            </p>
-            <h2 className="text-4xl font-light">Shop</h2>
+            <p style={{ fontSize: "0.75rem", letterSpacing: "0.4em", textTransform: "uppercase", color: p.lightMuted, marginBottom: "0.5rem", fontFamily: "system-ui, sans-serif" }}>New Arrivals</p>
+            <h2 style={{ fontSize: "2.5rem", fontWeight: 300, color: p.headingText }}>Shop</h2>
           </div>
-          <div className="hidden md:flex gap-3" style={{ fontFamily: "system-ui, sans-serif" }}>
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                className="text-xs tracking-widest uppercase px-4 py-2 border border-[#d6cfc6] text-[#78716c] hover:border-[#1c1917] hover:text-[#1c1917] transition-all"
-              >
-                {cat}
-              </button>
+          <div className="ec-cats" style={{ display: "flex", gap: "0.75rem", fontFamily: "system-ui, sans-serif" }}>
+            {CATEGORIES.map(cat => (
+              <button key={cat} style={{
+                fontSize: "0.75rem", letterSpacing: "0.1em", textTransform: "uppercase",
+                padding: "0.5rem 1rem", border: `1px solid ${p.catBorder}`,
+                color: p.muted, backgroundColor: "transparent",
+                cursor: "pointer", fontFamily: "system-ui, sans-serif",
+                transition: "all 0.2s",
+              }}>{cat}</button>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {PRODUCTS.map(({ name, category, price, img }) => (
-            <div key={name} className="group cursor-pointer">
-              <div className="aspect-square overflow-hidden bg-[#ede8e0] mb-4">
-                <img
-                  src={img}
-                  alt={name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div
-                className="flex items-start justify-between gap-2"
-                style={{ fontFamily: "system-ui, sans-serif" }}
-              >
-                <div>
-                  <p className="text-sm font-medium text-[#1c1917]">{name}</p>
-                  <p className="text-xs text-[#a8a29e] mt-0.5 tracking-wider uppercase">{category}</p>
-                </div>
-                <p className="text-sm text-[#1c1917] font-medium">{price}</p>
-              </div>
-            </div>
+        <div className="ec-products">
+          {PRODUCTS.map(product => (
+            <ProductCard key={product.name} {...product} palette={p} />
           ))}
         </div>
 
-        <div className="text-center mt-16">
-          <a
-            href="#"
-            className="text-sm border border-[#d6cfc6] text-[#78716c] px-10 py-3.5 hover:border-[#1c1917] hover:text-[#1c1917] transition-all"
-            style={{ fontFamily: "system-ui, sans-serif" }}
-          >
-            View All Products
-          </a>
+        <div style={{ textAlign: "center", marginTop: "4rem" }}>
+          <a href="#" style={{
+            fontSize: "0.875rem", border: `1px solid ${p.catBorder}`, color: p.muted,
+            padding: "0.9rem 2.5rem", textDecoration: "none", fontFamily: "system-ui, sans-serif",
+            transition: "all 0.2s",
+          }}>View All Products</a>
         </div>
       </section>
 
-      {/* OUR STORY */}
-      <section id="story" className="bg-[#1c1917] text-[#f9f6f1] py-28 px-6">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <p
-              className="text-xs tracking-[0.4em] uppercase text-[#a8a29e] mb-6"
-              style={{ fontFamily: "system-ui, sans-serif" }}
-            >
-              Est. 2016
-            </p>
-            <h2 className="text-5xl font-light leading-tight mb-8">
-              We believe<br />in slow making.
-            </h2>
-            <p
-              className="text-[#a8a29e] leading-relaxed mb-6"
-              style={{ fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}
-            >
-              Maison started as a single potter's studio in Lisbon. Today we partner with 14 makers across Portugal, France, and Denmark — each chosen for their craft, not their output.
-            </p>
-            <p
-              className="text-[#a8a29e] leading-relaxed"
-              style={{ fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}
-            >
-              Every piece you buy comes with the maker's name and story. We think that matters.
-            </p>
-          </div>
-          <div className="aspect-4/5 overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&q=80"
-              alt="Potter at work"
-              className="w-full h-full object-cover opacity-80"
-            />
+      {/* ─── OUR STORY ─── */}
+      <section id="story" style={{
+        backgroundColor: p.storyBg, color: p.storyText,
+        padding: "7rem 1.5rem",
+        transition: "all 0.4s",
+      }}>
+        <div style={{ maxWidth: "64rem", margin: "0 auto" }}>
+          <div className="ec-story">
+            <div>
+              <p style={{ fontSize: "0.75rem", letterSpacing: "0.4em", textTransform: "uppercase", color: p.storyMuted, marginBottom: "1.5rem", fontFamily: "system-ui, sans-serif" }}>Est. 2016</p>
+              <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300, lineHeight: 1.1, marginBottom: "2rem", color: p.storyText }}>
+                We believe<br />in slow making.
+              </h2>
+              <p style={{ color: p.storyMuted, lineHeight: 1.6, marginBottom: "1.5rem", fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}>
+                Maison started as a single potter's studio in Lisbon. Today we partner with 14 makers across Portugal, France, and Denmark — each chosen for their craft, not their output.
+              </p>
+              <p style={{ color: p.storyMuted, lineHeight: 1.6, fontFamily: "system-ui, sans-serif", fontSize: "0.95rem" }}>
+                Every piece you buy comes with the maker's name and story. We think that matters.
+              </p>
+            </div>
+            <div style={{ aspectRatio: "4/5", overflow: "hidden" }}>
+              <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&q=80" alt="Potter at work" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.8 }} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* NEWSLETTER */}
-      <section className="border-t border-[#e8e0d5] py-20 px-6 text-center">
-        <h3 className="text-3xl font-light mb-3">Join our list.</h3>
-        <p
-          className="text-[#78716c] text-sm mb-8"
-          style={{ fontFamily: "system-ui, sans-serif" }}
-        >
+      {/* ─── NEWSLETTER ─── */}
+      <section style={{ borderTop: `1px solid ${p.navBorder}`, padding: "5rem 1.5rem", textAlign: "center", backgroundColor: p.nlBg, transition: "all 0.4s" }}>
+        <h3 style={{ fontSize: "1.75rem", fontWeight: 300, marginBottom: "0.75rem", color: p.headingText }}>Join our list.</h3>
+        <p style={{ color: p.muted, fontSize: "0.875rem", marginBottom: "2rem", fontFamily: "system-ui, sans-serif" }}>
           New arrivals and maker stories, once a month.
         </p>
-        <div
-          className="flex max-w-md mx-auto gap-2"
-          style={{ fontFamily: "system-ui, sans-serif" }}
-        >
-          <input
-            type="email"
-            placeholder="your@email.com"
-            className="flex-1 px-4 py-3 text-sm border border-[#d6cfc6] bg-transparent placeholder-[#c4bbb1] focus:outline-none focus:border-[#1c1917]"
-          />
-          <button className="px-6 py-3 text-sm bg-[#1c1917] text-[#f9f6f1] hover:bg-[#292524] transition-colors">
-            Subscribe
-          </button>
+        <div style={{ display: "flex", maxWidth: "28rem", margin: "0 auto", gap: "0.5rem", fontFamily: "system-ui, sans-serif" }}>
+          <input type="email" placeholder="your@email.com" style={{
+            flex: 1, padding: "0.85rem 1rem", fontSize: "0.875rem",
+            border: `1px solid ${p.nlBorder}`, backgroundColor: "transparent",
+            color: p.darkText, outline: "none", boxSizing: "border-box",
+          }} />
+          <button style={{
+            padding: "0.85rem 1.5rem", fontSize: "0.8rem", fontWeight: 700,
+            letterSpacing: "0.05em", textTransform: "uppercase",
+            backgroundColor: p.nlBtnBg, color: p.nlBtnText,
+            border: "none", cursor: "pointer",
+            transition: "background-color 0.2s",
+          }}>Subscribe</button>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-[#e8e0d5] px-6 py-10">
-        <div
-          className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#a8a29e]"
-          style={{ fontFamily: "system-ui, sans-serif" }}
-        >
-          <span
-            className="tracking-[0.12em] uppercase text-[#1c1917] font-light"
-            style={{ fontFamily: "Georgia, serif" }}
-          >
-            Maison
-          </span>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-[#1c1917] transition-colors">Shipping</a>
-            <a href="#" className="hover:text-[#1c1917] transition-colors">Returns</a>
-            <a href="#" className="hover:text-[#1c1917] transition-colors">Contact</a>
+      {/* ─── FOOTER ─── */}
+      <footer style={{ borderTop: `1px solid ${p.footerBorder}`, padding: "2.5rem 1.5rem", transition: "all 0.4s" }}>
+        <div style={{
+          maxWidth: "72rem", margin: "0 auto",
+          display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between",
+          gap: "1rem", fontSize: "0.875rem", color: p.footerMuted, fontFamily: "system-ui, sans-serif",
+        }}>
+          <span style={{ letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "Georgia, serif", fontWeight: 300, color: p.darkText }}>Maison</span>
+          <div style={{ display: "flex", gap: "2rem" }}>
+            <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Shipping</a>
+            <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Returns</a>
+            <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Contact</a>
           </div>
           <span>© 2025 Maison</span>
         </div>
       </footer>
-
     </div>
-  );
+  )
 }
