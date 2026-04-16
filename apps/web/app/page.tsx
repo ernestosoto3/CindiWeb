@@ -798,7 +798,8 @@ function FloatingBrowser({
   const [entranceDelta, setEntranceDelta] = useState<Pt>({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const hoveredRef = useRef(false);
-  const driftBlendRef = useRef(1);
+  /** Smooth 0–1 blend: slows floating drift while hovered */
+  const hoverBlendRef = useRef(1);
 
   const velRef = useRef<Velocity>(initialVelocity);
 
@@ -876,8 +877,8 @@ function FloatingBrowser({
       const maxY = Math.max(minY, sectionRect.height - height);
 
       const driftTarget = hoveredRef.current ? 0 : 1;
-      driftBlendRef.current += (driftTarget - driftBlendRef.current) * 0.14;
-      const drift = driftBlendRef.current * driftBlendRef.current;
+      hoverBlendRef.current += (driftTarget - hoverBlendRef.current) * 0.14;
+      const drift = hoverBlendRef.current * hoverBlendRef.current;
 
       let nextX = current.x + velRef.current.x * dt * drift;
       let nextY = current.y + velRef.current.y * dt * drift;
