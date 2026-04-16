@@ -215,7 +215,6 @@ function Nav({ theme, onToggle }: { theme: string; onToggle: () => void }) {
     { label: "Nosotros",      href: "#about" },
     { label: "Galería",       href: "#gallery" },
     { label: "Horarios",      href: "#hours" },
-    { label: "Reservaciones", href: "#reservations" },
   ];
 
   return (
@@ -268,10 +267,6 @@ function Nav({ theme, onToggle }: { theme: string; onToggle: () => void }) {
 
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
           <ThemeToggle theme={theme} onToggle={onToggle} />
-          <a href="#reservations" className="btn-primary nav-desktop"
-            style={{ padding: "0.6rem 1.5rem", fontSize: "0.56rem" }}>
-            Reservar
-          </a>
           <button onClick={() => setOpen(!open)} className="nav-burger" style={{
             background: "none", border: "none", cursor: "pointer",
             color: "var(--text-2)", fontSize: "0.6rem",
@@ -298,11 +293,6 @@ function Nav({ theme, onToggle }: { theme: string; onToggle: () => void }) {
               {l.label}
             </a>
           ))}
-          <a href="#reservations" onClick={() => setOpen(false)}
-            className="btn-primary"
-            style={{ display: "inline-block", marginTop: "1.4rem", fontSize: "0.6rem" }}>
-            Reservar
-          </a>
         </div>
       )}
     </header>
@@ -376,8 +366,7 @@ function Hero() {
         </p>
 
         <div className="anim-fade-up d4" style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>
-          <a href="#reservations" className="btn-primary">Hacer reservación</a>
-          <a href="#menu" className="btn-secondary">Ver el menú</a>
+          <a href="#menu" className="btn-primary">Ver el menú</a>
         </div>
 
         {/* Credential badge — absolute bottom-left on desktop, inline on mobile */}
@@ -738,76 +727,6 @@ function HoursLocation() {
   );
 }
 
-// ─── RESERVATIONS ─────────────────────────────────────────────────────────────
-function Reservations() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", date: "", time: "", guests: "2", message: "" });
-  const [submitted, setSubmitted] = useState(false);
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm(p => ({ ...p, [e.target.name]: e.target.value }));
-  const onSubmit = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); };
-
-  const TIMES = ["11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM"];
-
-  return (
-    <section id="reservations" className="section" style={{
-      background: "var(--bg-3)", borderTop: "1px solid var(--border-md)",
-    }}>
-      <div className="wrap-sm">
-        <div className="section-head">
-          <span className="eyebrow">Reservaciones</span>
-          <h2 className="section-title font-cinzel">Reserva <em>tu mesa</em></h2>
-          <Ornament />
-          <p className="font-crimson" style={{
-            fontStyle: "italic", fontSize: "0.98rem",
-            color: "var(--text-3)", marginTop: "1.1rem",
-          }}>
-            Para grupos de 8 o más, llámanos al (787) 734-6573.
-          </p>
-        </div>
-
-        {submitted ? (
-          <div style={{
-            textAlign: "center", padding: "4.5rem 2rem",
-            border: "1px solid var(--border-md)", background: "var(--bg-2)",
-          }}>
-            <Ornament />
-            <h3 className="font-cinzel" style={{
-              fontSize: "1.7rem", fontWeight: 400,
-              color: "var(--primary)", margin: "1.4rem 0 0.8rem",
-            }}>
-              Gracias, {form.name}.
-            </h3>
-            <p className="font-crimson" style={{
-              fontStyle: "italic", fontSize: "1.05rem",
-              color: "var(--text-2)", lineHeight: 1.7,
-            }}>
-              Hemos recibido tu solicitud.<br />
-              Te confirmaremos en las próximas 24 horas.
-            </p>
-          </div>
-        ) : (
-          <form onSubmit={onSubmit} style={{ display: "flex", flexDirection: "column", gap: "2.1rem" }}>
-            <div className="g2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
-              <div><label className="f-label">Nombre completo</label><input name="name" value={form.name} onChange={onChange} required placeholder="Tu nombre" className="f-input" /></div>
-              <div><label className="f-label">Correo electrónico</label><input name="email" type="email" value={form.email} onChange={onChange} required placeholder="tu@correo.com" className="f-input" /></div>
-            </div>
-            <div><label className="f-label">Teléfono (opcional)</label><input name="phone" type="tel" value={form.phone} onChange={onChange} placeholder="(787) 000-0000" className="f-input" /></div>
-            <div className="g3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.8rem" }}>
-              <div><label className="f-label">Fecha</label><input name="date" type="date" value={form.date} onChange={onChange} required className="f-input" style={{ colorScheme: "light dark" }} /></div>
-              <div><label className="f-label">Hora</label><select name="time" value={form.time} onChange={onChange} required className="f-input"><option value="">Seleccionar</option>{TIMES.map(t => <option key={t}>{t}</option>)}</select></div>
-              <div><label className="f-label">Personas</label><select name="guests" value={form.guests} onChange={onChange} className="f-input">{[1,2,3,4,5,6,7].map(n => <option key={n}>{n}</option>)}</select></div>
-            </div>
-            <div><label className="f-label">Peticiones especiales</label><textarea name="message" value={form.message} onChange={onChange} placeholder="Restricciones dietéticas, celebraciones, preferencias…" rows={4} className="f-input" style={{ resize: "vertical" }} /></div>
-            <div style={{ textAlign: "center", paddingTop: "0.3rem" }}>
-              <button type="submit" className="btn-primary">Solicitar reservación</button>
-            </div>
-          </form>
-        )}
-      </div>
-    </section>
-  );
-}
 
 // ─── FOOTER ───────────────────────────────────────────────────────────────────
 function Footer() {
@@ -895,7 +814,6 @@ export default function ElTenedorPage(): JSX.Element {
         <About />
         <Gallery />
         <HoursLocation />
-        <Reservations />
       </main>
       <Footer />
     </>
