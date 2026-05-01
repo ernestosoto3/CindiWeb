@@ -134,11 +134,10 @@ const TABS: { key: MenuCat; label: string }[] = [
 ];
 
 const GALLERY = [
-  { label: "Carnes a la parrilla", src: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=900&q=80" },
-  { label: "El salón histórico",   src: "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=900&q=80" },
-  { label: "Mariscos",             src: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=900&q=80" },
+  { label: "Chimenea Rum Caray", src: "/images/rumcaray-chimenea.JPG" },
   { label: "Selección de vinos",   src: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=900&q=80" },
   { label: "Alta cocina",          src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&q=80" },
+  { label: "El salón histórico",   src: "/images/interior-el-tenedor.JPG"},
 ];
 
 const HISTORY_CARDS = [
