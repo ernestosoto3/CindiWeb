@@ -925,11 +925,18 @@ function Footer() {
       <p style={{ fontSize: "0.7rem", color: "var(--accent-2)", marginBottom: "0.3rem" }}>Calle Emilia Príncipe #1, Urb. Madrid · Juncos, PR 00777</p>
       <p style={{ fontSize: "0.7rem", color: "var(--accent-2)", marginBottom: "1.8rem" }}>(787) 734-6573</p>
       <div style={{ display: "flex", justifyContent: "center", gap: "2.2rem", marginBottom: "2.2rem" }}>
-        {["Instagram", "Facebook"].map(s => (
-          <a key={s} href="#" style={{ fontSize: "0.56rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(244, 212, 120, 1)", textDecoration: "none", transition: "color 0.2s" }}
-            onMouseEnter={e => ((e.target as HTMLElement).style.color = "var(--dark-text)")}
-            onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(244, 212, 120, 1)")}>{s}</a>
-        ))}
+        <a href="https://www.facebook.com/share/18c82624TL/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
+          style={{ fontSize: "0.56rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(244, 212, 120, 1)", textDecoration: "none", transition: "color 0.2s" }}
+          onMouseEnter={e => ((e.target as HTMLElement).style.color = "var(--dark-text)")}
+          onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(244, 212, 120, 1)")}>
+          Facebook
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer"
+          style={{ fontSize: "0.56rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(244, 212, 120, 1)", textDecoration: "none", transition: "color 0.2s" }}
+          onMouseEnter={e => ((e.target as HTMLElement).style.color = "var(--dark-text)")}
+          onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(244, 212, 120, 1)")}>
+          Instagram
+        </a>
       </div>
       <p style={{ fontSize: "0.56rem", color: "rgba(200,190,160,.25)", letterSpacing: "0.1em" }}>© {new Date().getFullYear()} El Tenedor · Todos los derechos reservados</p>
     </footer>
