@@ -135,8 +135,8 @@ const TABS: { key: MenuCat; label: string }[] = [
 
 const GALLERY = [
   { label: "Chimenea Rum Caray", src: "/images/rumcaray-chimenea.JPG" },
-  { label: "Selección de vinos",   src: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=900&q=80" },
-  { label: "Alta cocina",          src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=900&q=80" },
+  { label: "Comida fresca",   src: "/images/comidafresca.jpg" },
+  { label: "Alta cocina",          src: "/images/cocinaalta.jpg" },
   { label: "El salón histórico",   src: "/images/interior-el-tenedor.JPG"},
 ];
 
@@ -931,7 +931,7 @@ function Footer() {
           onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(244, 212, 120, 1)")}>
           Facebook
         </a>
-        <a href="#" target="_blank" rel="noopener noreferrer"
+        <a href="https://www.instagram.com/el.tenedorpr?igsh=emwwZzRqN2Y4djdi" target="_blank" rel="noopener noreferrer"
           style={{ fontSize: "0.56rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(244, 212, 120, 1)", textDecoration: "none", transition: "color 0.2s" }}
           onMouseEnter={e => ((e.target as HTMLElement).style.color = "var(--dark-text)")}
           onMouseLeave={e => ((e.target as HTMLElement).style.color = "rgba(244, 212, 120, 1)")}>
@@ -960,12 +960,12 @@ export default function ElTenedorPage(): JSX.Element {
     };
   }, [introActive]);
 
-  const handleIntroComplete = useCallback(() => {
-    document.documentElement.style.overflow = "";
-    document.documentElement.scrollTop = 0;
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-    setIntroActive(false);
-  }, []);
+const handleIntroComplete = useCallback(() => {
+  document.documentElement.style.overflow = "";
+  document.documentElement.scrollTop = 0;
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  setIntroActive(false);
+}, []);
 
   return (
     <>
